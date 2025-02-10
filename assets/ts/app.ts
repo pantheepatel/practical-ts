@@ -1,9 +1,5 @@
 // FEATURE: added event delegation on mainTable.
 
-// import { changeTheme } from "./storage";
-// import { main, inputField, inputFieldHistory, point } from "./event";
-// import { changeButton, Calculator } from "./calculator";
-
 // code of events.ts
 let main = document.getElementById("main");
 let inputField = document.getElementById("spanOutput");
@@ -83,7 +79,6 @@ class Calculator {
         }
         if (this.displayCurrVal === "" && !this.currentValue) {
             console.log("blank")
-            // document.getElementById("zero").setAttribute('disabled');
             if (operatorsBasic.includes(value)) {
                 this.displayCurrVal = ""
                 this.updateTopDisplay("0", value)
@@ -93,14 +88,6 @@ class Calculator {
             } else if (value === "(") {
                 this.updateTopDisplay("(", "");
             }
-            // else if (value === "(") {
-            //     this.updateTopDisplay("(0", "")
-            // }
-            // else if (this.isConstant) {
-            //     console.log("direct constant")
-            //     this.displayCurrVal = value;
-            //     this.updateDisplay()
-            // }
         }
         else if (this.isAns && this.displayCurrVal) {
             console.log("ans")
@@ -141,13 +128,11 @@ class Calculator {
 
     }
     updateTopDisplay(value: string = "", operator: string = "", ans: boolean = false, replace: boolean = false) {
-        // console.log("in update top display: ", this.currentValue.toString())
         if (this.currentValue.length && !replace) {
             this.currentValue = this.currentValue + value + operator
         } else {
             this.currentValue = value + operator
         }
-        // console.log("now: ",this.currentValue)
         (this.displayExp as any).value = this.currentValue;
 
         if (!ans) {
@@ -167,19 +152,15 @@ class Calculator {
         this.isConstant = false;
     }
     deleteLast() {
-        // this.currentValue = this.currentValue.slice(0, -1);
         this.displayCurrVal = this.displayCurrVal.slice(0, - 1);
         this.updateDisplay();
     }
     replaceLast(length: number, operator: any) {
         let updateStr = this.currentValue.slice(0, length);
-        // this.displayCurrVal = this.currentValue.slice(0, length);
         this.updateTopDisplay(updateStr, operator, false, true);
     }
     updateDisplay() {
         (this.display as any).value = this.displayCurrVal;
-        // this.displayExp.value = this.currentValue;
-        // console.log(this.displayCurrVal, this.currentValue)
     }
     basicOperations() {
         try {
@@ -195,14 +176,7 @@ class Calculator {
                 if (this.displayCurrVal) {
                     // Complete the expression
                     if (expression.includes('Math.pow')) {
-                        // if (expression.includes('* Math.pow(10,')) {
-                        //     // EXP operation
-                        //     expression = expression + this.displayCurrVal + ')';
-                        // } 
-                        // else {
-                        // yRootX operation
                         expression = expression + this.displayCurrVal + ')';
-                        // }
                     } else if (expression.includes('Math.log')) {
                         expression = expression + this.displayCurrVal + ')';
                     }
@@ -293,14 +267,11 @@ class Calculator {
         if (this.displayCurrVal) {
             this.displayCurrVal = (-parseFloat(this.displayCurrVal)).toString();
             console.log("replace dis: ", this.displayCurrVal.length - 1)
-            // this.replaceLast(-parseFloat(this.displayCurrVal.length));
-            // this.currentValue += this.displayCurrVal
             this.updateDisplay();
         }
     };
 
     addConstants(value: any) {
-        // console.log(value)
         if (value) {
             this.displayCurrVal = value;
             if (operatorsBasic.includes(this.currentValue.toString().slice(-1))) { this.currentValue += this.displayCurrVal; }
@@ -314,7 +285,6 @@ class Calculator {
     absolute() {
         if (this.displayCurrVal !== "") {
             this.displayCurrVal = Math.abs(Number(this.displayCurrVal)).toString();
-            // this.ans = true;
             this.updateDisplay();
         }
     }
@@ -403,7 +373,6 @@ class Calculator {
 
     basicTrigoFunc(method: string, isIns = false, degree = false) {
         let disValue: any = this.displayCurrVal;
-        // console.log(value, method)
         if (disValue === "") return;
         let value = degree ? (disValue * Math.PI) / 180 : disValue;
         if (!isIns) { this.displayCurrVal = eval(`Math.${method}(${value})`); }
@@ -414,9 +383,6 @@ class Calculator {
 
 }
 
-
-
-
 // code of app.ts
 // changes that are need to be done on page load
 document.addEventListener("DOMContentLoaded", () => {
@@ -426,7 +392,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayEle = document.getElementById("spanOutput") as HTMLInputElement;
     const displayExp = document.getElementById("spanOutputHistory") as HTMLInputElement;
     const calculator = new Calculator(displayEle, displayExp);
-
 
     // all event listners that are importtant
     let themeBtn = document.getElementById("changeThemeBtn") as HTMLButtonElement;
@@ -446,7 +411,6 @@ document.addEventListener("DOMContentLoaded", () => {
         let targetEvent = event.target as HTMLButtonElement;
         if (targetEvent.tagName === "BUTTON") {
             const buttonValue = targetEvent.value;
-            // console.log(buttonValue)
             if (buttonValue === "clear") {
                 calculator.clearDisplay();
             }
@@ -499,7 +463,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let degShow: boolean = false;
     (document.getElementById("fixedDegree") as HTMLButtonElement).addEventListener("click", function (event) {
         let buttonValue = (event.target as HTMLButtonElement).id;
-        // console.log(buttonValue)
         let deg = document.getElementById("degree") as HTMLInputElement;
         let degLable = document.getElementById("degreeLable") as HTMLLabelElement;
         degLable.innerText = "RAD"
@@ -545,13 +508,10 @@ document.addEventListener("DOMContentLoaded", () => {
             { "csc-1": "asin" }, { "sec-1": "acos" }, { "cot-1": "atan" },
             { "csc-1h": "asinh" }, { "sec-1h": "acosh" }, { "cot-1h": "atanh" }
         ]
-        // for below array sin-cosec, cos-sec, tan-cot
-        // let insTrigo = ["sin", "cos", "tan", "sinh", "cosh", "tanh", "sin-1", "cos-1", "tan-1", "sin-1h", "cos-1h", "tan-1h"]
 
         let isInverse = (document.getElementById("changeButtonsIns") as HTMLInputElement).checked;
         let isHyp = (document.getElementById("changeButtonsHyp") as HTMLInputElement).checked;
         const buttonValue = (event.target as HTMLButtonElement).value;
-        // console.log(isHyp, isInverse)
         let trigoElements: HTMLButtonElement[] = Array.from(document.getElementsByClassName("trigoFun") as any)
         if (isHyp && isInverse) {
             trigoElements.forEach((ele, index) => {
